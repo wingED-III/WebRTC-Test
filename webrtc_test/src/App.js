@@ -44,7 +44,7 @@ function App() {
   }, [])
 
   // function
-  const calluser = (id) => {
+  const callUser = (id) => {
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -89,8 +89,10 @@ function App() {
     })
 
     peer.on("stream", (stream) => {
-      userVideo.current.srcObject
+      userVideo.current.srcObject = stream
     })
+
+    peer.signal(callerSignal)
     connectionRef.current = peer
   }
 
