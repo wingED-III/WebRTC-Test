@@ -2,7 +2,6 @@ const express = require("express")
 const http = require("http")
 const app = express()
 const server = http.createServer(app)
-const socket = require("socket.io")
 const io = require("socket.io")(server, {
     cors: {
         origin: "http://localhost:3000",
@@ -24,4 +23,6 @@ io.on("connection", (socket) => {
         socket.on("answerCall", (data) => io.to(data.to).emit("callAccepted"), data.signal)
     })
 })
+
+server.listen(5000, () => console.log("Server is running on port 5000"))
 
