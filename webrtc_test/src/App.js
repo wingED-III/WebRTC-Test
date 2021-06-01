@@ -55,7 +55,7 @@ function App() {
     peer.on("signal", (data) => {
       socket.emit("callUser", {
         userToCall: id,
-        signal: data,
+        signalData: data,
         from: me,
         name: name
       })
@@ -102,19 +102,22 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <>
       <h1 style={{ textAlign: "center", color: "#fff" }}>Web Video Conference</h1>
 
       {/* video box*/}
       <div className="container">
-        <div className="video-container"></div>
-        <div className="video">
-          {stream && <video playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />}
-        </div>
-        <div className="video">
-          {callAccepted && !callEnded ? <video playsInline ref={userVideo} autoPlay style={{ width: "300px" }} /> : null}
+        <div className="video-container">
+          <div className="video">
+            {stream && <video playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />}
+          </div>
+
+          <div className="video">
+            {callAccepted && !callEnded ? <video playsInline ref={userVideo} autoPlay style={{ width: "300px" }} /> : null}
+          </div>
         </div>
       </div>
+
       <div className="myId">
 
         {/*enter name */}
@@ -170,7 +173,7 @@ function App() {
           </div>
         ) : null}
       </div>
-    </div>
+    </>
   );
 }
 
