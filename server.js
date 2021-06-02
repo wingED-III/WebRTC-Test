@@ -4,11 +4,14 @@ const app = express()
 const server = http.createServer(app)
 const io = require("socket.io")(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "*",
         methods: ["GET", "POST"]
     }
 })
 
+app.get('/', (req, res) => {
+	res.send('Server is running.');
+});
 
 io.on("connection", (socket) => {
     socket.emit("me", socket.id)
@@ -23,4 +26,4 @@ io.on("connection", (socket) => {
     
     socket.on("answerCall", (data) => { io.to(data.to).emit("callAccepted", data.signal) })
 })
-server.listen(5000, () => console.log("Server is running on port 5000"))
+server.listen(5000,'0.0.0.0', () => console.log("Server is running on port 5000"))
