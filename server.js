@@ -9,8 +9,10 @@ const io = require("socket.io")(server, {
     }
 })
 
+const PORT = process.env.PORT || 5000
+
 app.get('/', (req, res) => {
-	res.send('Server is running.');
+    res.send('Server is running.');
 });
 
 io.on("connection", (socket) => {
@@ -21,9 +23,10 @@ io.on("connection", (socket) => {
     })
 
     socket.on("callUser", (data) => {
-        io.to(data.userToCall).emit("callUser", { signal: data.signalData, from: data.from, name: data.name })       
+        io.to(data.userToCall).emit("callUser", { signal: data.signalData, from: data.from, name: data.name })
     })
-    
+
     socket.on("answerCall", (data) => { io.to(data.to).emit("callAccepted", data.signal) })
 })
-server.listen(5000,'0.0.0.0', () => console.log("Server is running on port 5000"))
+
+server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

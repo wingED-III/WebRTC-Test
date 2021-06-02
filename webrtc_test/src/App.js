@@ -9,7 +9,8 @@ import Peer from "simple-peer"
 import io from "socket.io-client"
 import "./App.css"
 
-const socket = io.connect("http://localhost:5000")
+// const socket = io.connect("http://localhost:5000")
+const socket = io.connect("https://web-rtc-test-v1.herokuapp.com/")
 
 function App() {
 
