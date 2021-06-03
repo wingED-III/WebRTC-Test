@@ -4,6 +4,11 @@ import IconButton from "@material-ui/core/IconButton"
 import TextField from "@material-ui/core/TextField"
 import AssignmentIcon from "@material-ui/icons/Assignment"
 import PhoneIcon from "@material-ui/icons/Phone"
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 import React, { useEffect, useRef, useState } from "react"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import Peer from "simple-peer"
@@ -29,8 +34,22 @@ function App() {
   const userVideo = useRef()
   const connectionRef = useRef()
 
+  const devices_list = []
+  
   //connect device
   useEffect(() => {
+    navigator.mediaDevices.enumerateDevices()
+      .then(function (devices) {
+        devices.forEach(function (device) {
+          var data = {deviceId : device.deviceId,kind : device.kind,label : device.label}
+          devices_list.push(data)
+        });
+      })
+      .catch(function (err) {
+        console.log(err.name + ": " + err.message);
+      });
+    console.log(123)
+    console.log(devices_list[0])
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
       setStream(stream)
       myVideo.current.srcObject = stream
@@ -143,6 +162,19 @@ function App() {
                 Video
           </Button>   
         </Grid>
+        <FormControl>
+          <Select
+            displayEmpty
+            inputProps={{ 'aria-label': 'Without label' }}
+          >
+          {devices_list.map(({deviceId,label}) => (
+          <MenuItem key={deviceId} value={label}>
+            {label}
+          </MenuItem>
+          ))}
+          </Select>
+          <FormHelperText>Audio Input</FormHelperText>
+        </FormControl>
 
         {/*enter name */}
         <TextField
