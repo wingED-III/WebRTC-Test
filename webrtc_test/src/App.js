@@ -33,7 +33,6 @@ function App() {
   const [mic_list, set_mic_list] = useState([])
   const [sound_output_list, set_sound_output_list] = useState([])
 
-
   //connect device
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
@@ -55,8 +54,10 @@ function App() {
       //   console.log(devices_list);
       // })
 
-
+    }).catch(function (err) {
+      console.log(err.name + ": " + err.message);
     })
+
     socket.on('me', (id) => { setMe(id) })
     socket.on("callUser", (data) => {
       setReceivingCall(true)
@@ -137,6 +138,18 @@ function App() {
     userVideo.current.muted = !userVideo.current.muted
   }
 
+  const onWebCamChange = (event) => {
+    console.log(event.target.value);
+  }
+
+  const onMicChange = (event) => {
+    console.log(event.target.value);
+  }
+
+  const onSoundOutputChange = (event) => {
+    console.log(event.target.value);
+  }
+
 
   return (
     <>
@@ -175,28 +188,28 @@ function App() {
         </Grid>
 
         {/* change webcam */}
-        <select>
+        <select onChange={onWebCamChange}>
           {
             devices_list.map(device => (
-              <option key={device.label} value={device.id}>- {device.label} </option>))
+              <option key={device.deviceId} value={device.deviceId}>- {device.label} </option>))
           }
 
         </select>
 
         {/* change mic */}
-        <select>
+        <select onChange={onMicChange}>
           {
             mic_list.map(device => (
-              <option key={device.label} value={device.id}>- {device.label} </option>))
+              <option key={device.deviceId} value={device.deviceId}>- {device.label} </option>))
           }
 
         </select>
 
-        {/* change output mic */}
-        <select>
+        {/* change sound output */}
+        <select onChange={onSoundOutputChange}>
           {
             sound_output_list.map(device => (
-              <option key={device.label} value={device.id}>- {device.label} </option>))
+              <option key={device.deviceId} value={device.id}>- {device.label} </option>))
           }
 
         </select>
