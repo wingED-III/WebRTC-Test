@@ -3,7 +3,7 @@ import IconButton from "@material-ui/core/IconButton"
 import TextField from "@material-ui/core/TextField"
 import AssignmentIcon from "@material-ui/icons/Assignment"
 import PhoneIcon from "@material-ui/icons/Phone"
-import React, { useEffect, useRef, useState } from "react"
+import React, { Component, useEffect, useRef, useState } from "react"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import Peer from "simple-peer"
 import io from "socket.io-client"
@@ -28,12 +28,17 @@ function App() {
   const userVideo = useRef()
   const connectionRef = useRef()
 
+  const [webcam_status, setwebcam_status] = useState(true)
+
+  const [devices_list, set_devices_list] = useState([])
+
+
   //connect device
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
-      setStream(stream)
-      myVideo.current.srcObject = stream
-    })
+    // navigator.mediaDevices.getUserMedia({ video: webcam_status, audio: true }).then((stream) => {
+    //   setStream(stream)
+    //   myVideo.current.srcObject = stream
+    // })
 
     socket.on('me', (id) => { setMe(id) })
     socket.on("callUser", (data) => {
@@ -100,7 +105,42 @@ function App() {
   const leaveCall = () => {
     setCallEnded(true)
     connectionRef.current.destroy()
+    window.location.reload();
   }
+
+  const toggleWebCam = () => {
+    console.log('before webcam click', webcam_status)
+    setwebcam_status(!webcam_status)
+    console.log('toggle webcam click', webcam_status)
+    navigator.mediaDevices.getUserMedia({ video: webcam_status, audio: true }).then((stream) => {
+      setStream(stream)
+      myVideo.current.srcObject = stream
+    })
+  }
+  
+
+  const changeCamera = () => {
+    console.log('Change camera click');
+
+    navigator.mediaDevices.enumerateDevices()
+      .then(function (devices) {
+        set_devices_list(devices)
+      })
+      .catch(function (err) {
+        console.log(err.name + ": " + err.message);
+      })
+      .then(() => {
+        console.log("here");
+        console.log(devices_list);
+      })
+  }
+
+
+  // const devices_list = [
+  //   { deviceId: 0, kind: "What", label:"Nope" }
+  // ]
+  // const [devices_list, set_devices_list] = useState([{ deviceId: 0, kind: "What", label: "Nope" }])
+
 
   return (
     <>
@@ -160,6 +200,17 @@ function App() {
           )}
           {idToCall}
         </div>
+
+        <Button onClick={toggleWebCam}>Toggle webcam </Button>
+
+        <Button onClick={changeCamera}>change webcam </Button>
+        <select>
+          {
+            devices_list.map(device => (
+              <option key={device.Id} value={device.label}>- {device.label} </option>))
+          }
+
+        </select>
       </div>
 
 
