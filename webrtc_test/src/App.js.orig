@@ -203,7 +203,11 @@ function App() {
         </Grid>
 
         {/* change webcam */}
-        <select onChange={onWebCamChange} style={{ marginBottom: "20px" , marginTop: "20px"}}>
+<<<<<<< HEAD
+        <select onChange={onWebCamChange}>
+=======
+        <select style={{ marginBottom: "20px" , marginTop: "20px"}}>
+>>>>>>> 99d61e463e6e46677afd810c2621a9f6b52ef2ef
           {
             devices_list.map(device => (
               <option key={device.deviceId} value={device.deviceId}>- {device.label} </option>))
@@ -212,7 +216,11 @@ function App() {
         </select>
 
         {/* change mic */}
-        <select onChange={onMicChange} style={{ marginBottom: "20px"}}>
+<<<<<<< HEAD
+        <select onChange={onMicChange}>
+=======
+        <select style={{ marginBottom: "20px"}}>
+>>>>>>> 99d61e463e6e46677afd810c2621a9f6b52ef2ef
           {
             mic_list.map(device => (
               <option key={device.deviceId} value={device.deviceId}>- {device.label} </option>))
@@ -220,8 +228,13 @@ function App() {
 
         </select>
 
+<<<<<<< HEAD
         {/* change sound output */}
-        <select onChange={onSoundOutputChange} style={{ marginBottom: "20px"}}>
+        <select onChange={onSoundOutputChange}>
+=======
+        {/* change output mic */}
+        <select style={{ marginBottom: "20px"}}>
+>>>>>>> 99d61e463e6e46677afd810c2621a9f6b52ef2ef
           {
             sound_output_list.map(device => (
               <option key={device.deviceId} value={device.id}>- {device.label} </option>))
