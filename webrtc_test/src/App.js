@@ -33,6 +33,7 @@ function App() {
   const myVideo = useRef()
   const userVideo = useRef()
   const connectionRef = useRef()
+  const refUserVideo = useRef(null)
 
   const devices_list = []
   
@@ -110,6 +111,7 @@ function App() {
 
     peer.on("stream", (stream) => {
       userVideo.current.srcObject = stream
+      userVideo.current.muted = false
     })
 
     peer.signal(callerSignal)
@@ -129,6 +131,10 @@ function App() {
     stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled
   }
 
+  const toggleSound = () => {
+    userVideo.current.muted = !userVideo.current.muted
+  }
+
 
   return (
     <>
@@ -142,7 +148,7 @@ function App() {
           </div>
 
           <div className="video">
-            {callAccepted && !callEnded ? <video playsInline ref={userVideo} autoPlay style={{ width: "300px" }} /> : null}
+            {callAccepted && !callEnded ? <video muted playsInline ref={userVideo} autoPlay style={{ width: "300px" }} /> : null}
           </div>
         </div>
       </div>
@@ -161,6 +167,9 @@ function App() {
           <Button variant="contained" color="secondary" onClick={toggleVideo}>
                 Video
           </Button>   
+          <Button variant="contained" color="secondary" onClick={toggleSound}>
+                Sound
+          </Button>  
         </Grid>
         <FormControl>
           <Select
