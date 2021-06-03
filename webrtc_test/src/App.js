@@ -30,6 +30,9 @@ function App() {
   const connectionRef = useRef()
 
   const [devices_list, set_devices_list] = useState([])
+  const [mic_list, set_mic_list] = useState([])
+  const [sound_output_list, set_sound_output_list] = useState([])
+
 
   //connect device
   useEffect(() => {
@@ -39,15 +42,20 @@ function App() {
 
       navigator.mediaDevices.enumerateDevices()
         .then(function (devices) {
-          set_devices_list(devices)
+          set_devices_list(devices.filter((device) => device.kind === 'videoinput'))
+          set_mic_list(devices.filter((device) => device.kind === 'audioinput'))
+          set_sound_output_list(devices.filter((device) => (device.kind === 'audiooutput')))
+
         })
         .catch(function (err) {
           console.log(err.name + ": " + err.message);
         })
-        .then(() => {
-          console.log("here");
-          console.log(devices_list);
-        })
+      // .then(() => {
+      //   console.log("here");
+      //   console.log(devices_list);
+      // })
+
+
     })
     socket.on('me', (id) => { setMe(id) })
     socket.on("callUser", (data) => {
@@ -124,7 +132,7 @@ function App() {
   const toggleVideo = () => {
     stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled
   }
-  
+
   const toggleSound = () => {
     userVideo.current.muted = !userVideo.current.muted
   }
@@ -170,18 +178,26 @@ function App() {
         <select>
           {
             devices_list.map(device => (
-              <option key={device.Id} value={device.label}>- {device.label} </option>))
+              <option key={device.label} value={device.id}>- {device.label} </option>))
           }
 
         </select>
 
         {/* change mic */}
         <select>
+          {
+            mic_list.map(device => (
+              <option key={device.label} value={device.id}>- {device.label} </option>))
+          }
 
         </select>
 
         {/* change output mic */}
         <select>
+          {
+            sound_output_list.map(device => (
+              <option key={device.label} value={device.id}>- {device.label} </option>))
+          }
 
         </select>
 
