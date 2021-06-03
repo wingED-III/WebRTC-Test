@@ -33,24 +33,11 @@ function App() {
   const myVideo = useRef()
   const userVideo = useRef()
   const connectionRef = useRef()
-  const refUserVideo = useRef(null)
 
   const devices_list = []
   
   //connect device
   useEffect(() => {
-    navigator.mediaDevices.enumerateDevices()
-      .then(function (devices) {
-        devices.forEach(function (device) {
-          var data = {deviceId : device.deviceId,kind : device.kind,label : device.label}
-          devices_list.push(data)
-        });
-      })
-      .catch(function (err) {
-        console.log(err.name + ": " + err.message);
-      });
-    console.log(123)
-    console.log(devices_list[0])
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
       setStream(stream)
       myVideo.current.srcObject = stream
@@ -171,19 +158,6 @@ function App() {
                 Sound
           </Button>  
         </Grid>
-        <FormControl>
-          <Select
-            displayEmpty
-            inputProps={{ 'aria-label': 'Without label' }}
-          >
-          {devices_list.map(({deviceId,label}) => (
-          <MenuItem key={deviceId} value={label}>
-            {label}
-          </MenuItem>
-          ))}
-          </Select>
-          <FormHelperText>Audio Input</FormHelperText>
-        </FormControl>
 
         {/*enter name */}
         <TextField
