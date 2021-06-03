@@ -27,7 +27,7 @@ function App() {
   const [idToCall, setIdToCall] = useState("")
   const [callEnded, setCallEnded] = useState(false)
   const [name, setName] = useState("")
-  const [userName,setUserName] = useState("")
+  const [userName, setUserName] = useState("")
 
   const myVideo = useRef()
   const userVideo = useRef()
@@ -128,6 +128,7 @@ function App() {
   const leaveCall = () => {
     setCallEnded(true)
     connectionRef.current.destroy()
+    window.location.reload();
   }
 
   const toggleMic = () => {
@@ -144,10 +145,24 @@ function App() {
 
   const onWebCamChange = (event) => {
     console.log(event.target.value);
+    navigator.mediaDevices.getUserMedia({
+      video: { deviceId: event.target.value ? { exact: event.target.value } : undefined },
+      audio: true
+    }).then((stream) => {
+      setStream(stream)
+    })
   }
 
   const onMicChange = (event) => {
     console.log(event.target.value);
+
+    navigator.mediaDevices.getUserMedia({
+      audio: { deviceId: event.target.value ? { exact: event.target.value } : undefined },
+      video: true
+    }).then((stream) => {
+      setStream(stream)
+    })
+
   }
 
   const onSoundOutputChange = (event) => {
@@ -161,49 +176,49 @@ function App() {
 
       {/* video box*/}
       <Grid
-          container
-          direction="row"
-          justify="center"
-          alignItems="center"
-          spacing = "10"
-        >
-          <Grid item>
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        spacing="10"
+      >
+        <Grid item>
           {stream && <video playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />}
-          </Grid>
-          <Grid item>
-          {callAccepted && !callEnded ? <video muted playsInline ref={userVideo} autoPlay style={{ width: "300px" }} /> : null}
-          </Grid>
-          
         </Grid>
-      
+        <Grid item>
+          {callAccepted && !callEnded ? <video muted playsInline ref={userVideo} autoPlay style={{ width: "300px" }} /> : null}
+        </Grid>
+
+      </Grid>
+
       <div className="myId">
 
-      <Grid
+        <Grid
           container
           direction="row"
           justify="center"
           alignItems="center"
-          spacing = "10"
+          spacing={1}
         >
-          <Grid item>
-          <IconButton color="primary" aria-label="Mic" onClick={toggleMic}>
+          <Grid item xs={3}>
+            <IconButton color="primary" aria-label="Mic" onClick={toggleMic}>
               <MicIcon fontSize="large" />
-          </IconButton>
+            </IconButton>
           </Grid>
-          <Grid item>
-          <IconButton color="primary" aria-label="Video" onClick={toggleVideo}>
+          <Grid item xs={3}>
+            <IconButton color="primary" aria-label="Video" onClick={toggleVideo}>
               <VideocamIcon fontSize="large" />
-          </IconButton>
+            </IconButton>
           </Grid>
-          <Grid item>
-          <IconButton color="primary" aria-label="Video" onClick={toggleSound}>
+          <Grid item xs={3}>
+            <IconButton color="primary" aria-label="Video" onClick={toggleSound}>
               <VolumeMuteIcon fontSize="large" />
-          </IconButton>
+            </IconButton>
           </Grid>
         </Grid>
 
         {/* change webcam */}
-        <select onChange={onWebCamChange} style={{ marginBottom: "20px" , marginTop: "20px"}}>
+        <select onChange={onWebCamChange} style={{ marginBottom: "20px", marginTop: "20px" }}>
           {
             devices_list.map(device => (
               <option key={device.deviceId} value={device.deviceId}>- {device.label} </option>))
@@ -212,7 +227,7 @@ function App() {
         </select>
 
         {/* change mic */}
-        <select onChange={onMicChange} style={{ marginBottom: "20px"}}>
+        <select onChange={onMicChange} style={{ marginBottom: "20px" }}>
           {
             mic_list.map(device => (
               <option key={device.deviceId} value={device.deviceId}>- {device.label} </option>))
@@ -221,7 +236,7 @@ function App() {
         </select>
 
         {/* change sound output */}
-        <select onChange={onSoundOutputChange} style={{ marginBottom: "20px"}}>
+        <select onChange={onSoundOutputChange} style={{ marginBottom: "20px" }}>
           {
             sound_output_list.map(device => (
               <option key={device.deviceId} value={device.id}>- {device.label} </option>))
