@@ -150,6 +150,7 @@ function App() {
       audio: true
     }).then((stream) => {
       setStream(stream)
+      myVideo.current.srcObject = stream
     })
   }
 
