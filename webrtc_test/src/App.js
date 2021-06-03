@@ -29,11 +29,25 @@ function App() {
   const userVideo = useRef()
   const connectionRef = useRef()
 
+  const [devices_list, set_devices_list] = useState([])
+
   //connect device
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
       setStream(stream)
       myVideo.current.srcObject = stream
+
+      navigator.mediaDevices.enumerateDevices()
+        .then(function (devices) {
+          set_devices_list(devices)
+        })
+        .catch(function (err) {
+          console.log(err.name + ": " + err.message);
+        })
+        .then(() => {
+          console.log("here");
+          console.log(devices_list);
+        })
     })
     socket.on('me', (id) => { setMe(id) })
     socket.on("callUser", (data) => {
@@ -137,12 +151,31 @@ function App() {
           alignItems="center"
         >
           <Button variant="contained" color="secondary" onClick={toggleMic}>
-                Mic
-          </Button>    
+            Mic
+          </Button>
           <Button variant="contained" color="secondary" onClick={toggleVideo}>
-                Video
-          </Button>   
+            Video
+          </Button>
         </Grid>
+
+        {/* change webcam */}
+        <select>
+          {
+            devices_list.map(device => (
+              <option key={device.Id} value={device.label}>- {device.label} </option>))
+          }
+
+        </select>
+
+        {/* change mic */}
+        <select>
+
+        </select>
+
+        {/* change output mic */}
+        <select>
+
+        </select>
 
         {/*enter name */}
         <TextField
