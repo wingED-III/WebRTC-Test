@@ -4,11 +4,6 @@ import IconButton from "@material-ui/core/IconButton"
 import TextField from "@material-ui/core/TextField"
 import AssignmentIcon from "@material-ui/icons/Assignment"
 import PhoneIcon from "@material-ui/icons/Phone"
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import React, { useEffect, useRef, useState } from "react"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import Peer from "simple-peer"
@@ -34,13 +29,25 @@ function App() {
   const userVideo = useRef()
   const connectionRef = useRef()
 
-  const devices_list = []
-  
+  const [devices_list, set_devices_list] = useState([])
+
   //connect device
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
       setStream(stream)
       myVideo.current.srcObject = stream
+
+      navigator.mediaDevices.enumerateDevices()
+        .then(function (devices) {
+          set_devices_list(devices)
+        })
+        .catch(function (err) {
+          console.log(err.name + ": " + err.message);
+        })
+        .then(() => {
+          console.log("here");
+          console.log(devices_list);
+        })
     })
     socket.on('me', (id) => { setMe(id) })
     socket.on("callUser", (data) => {
@@ -117,7 +124,7 @@ function App() {
   const toggleVideo = () => {
     stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled
   }
-
+  
   const toggleSound = () => {
     userVideo.current.muted = !userVideo.current.muted
   }
@@ -149,15 +156,31 @@ function App() {
           alignItems="center"
         >
           <Button variant="contained" color="secondary" onClick={toggleMic}>
-                Mic
-          </Button>    
+            Mic
+          </Button>
           <Button variant="contained" color="secondary" onClick={toggleVideo}>
-                Video
-          </Button>   
-          <Button variant="contained" color="secondary" onClick={toggleSound}>
-                Sound
-          </Button>  
+            Video
+          </Button>
         </Grid>
+
+        {/* change webcam */}
+        <select>
+          {
+            devices_list.map(device => (
+              <option key={device.Id} value={device.label}>- {device.label} </option>))
+          }
+
+        </select>
+
+        {/* change mic */}
+        <select>
+
+        </select>
+
+        {/* change output mic */}
+        <select>
+
+        </select>
 
         {/*enter name */}
         <TextField
