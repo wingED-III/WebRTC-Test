@@ -27,6 +27,7 @@ function App() {
   const [idToCall, setIdToCall] = useState("")
   const [callEnded, setCallEnded] = useState(false)
   const [name, setName] = useState("")
+  const [userName,setUserName] = useState("")
 
   const myVideo = useRef()
   const userVideo = useRef()
@@ -64,7 +65,7 @@ function App() {
     socket.on("callUser", (data) => {
       setReceivingCall(true)
       setCaller(data.from)
-      setName(data.name)
+      setUserName(data.name)
       setCallerSignal(data.signal)
     })
   }, [])
@@ -146,17 +147,21 @@ function App() {
       <h1 style={{ textAlign: "center", color: "#fff" }}>Web Video Conference</h1>
 
       {/* video box*/}
-      <div className="container">
-        <div className="video-container">
-          <div className="video">
-            {stream && <video playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />}
-          </div>
-
-          <div className="video">
-            {callAccepted && !callEnded ? <video muted playsInline ref={userVideo} autoPlay style={{ width: "300px" }} /> : null}
-          </div>
-        </div>
-      </div>
+      <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+          spacing = "10"
+        >
+          <Grid item>
+          {stream && <video playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />}
+          </Grid>
+          <Grid item>
+          {callAccepted && !callEnded ? <video muted playsInline ref={userVideo} autoPlay style={{ width: "300px" }} /> : null}
+          </Grid>
+          
+        </Grid>
       
       <div className="myId">
 
@@ -185,7 +190,7 @@ function App() {
         </Grid>
 
         {/* change webcam */}
-        <select>
+        <select style={{ marginBottom: "20px" , marginTop: "20px"}}>
           {
             devices_list.map(device => (
               <option key={device.label} value={device.id}>- {device.label} </option>))
@@ -194,7 +199,7 @@ function App() {
         </select>
 
         {/* change mic */}
-        <select>
+        <select style={{ marginBottom: "20px"}}>
           {
             mic_list.map(device => (
               <option key={device.label} value={device.id}>- {device.label} </option>))
@@ -203,7 +208,7 @@ function App() {
         </select>
 
         {/* change output mic */}
-        <select>
+        <select style={{ marginBottom: "20px"}}>
           {
             sound_output_list.map(device => (
               <option key={device.label} value={device.id}>- {device.label} </option>))
@@ -248,7 +253,6 @@ function App() {
               <PhoneIcon fontSize="large" />
             </IconButton>
           )}
-          {idToCall}
         </div>
       </div>
 
@@ -257,7 +261,7 @@ function App() {
       <div>
         {receivingCall && !callAccepted ? (
           <div className="caller">
-            <h1 >{name} is calling...</h1>
+            <h1 >{userName} is calling...</h1>
             <Button variant="contained" color="primary" onClick={answerCall}>
               Answer
 						</Button>
