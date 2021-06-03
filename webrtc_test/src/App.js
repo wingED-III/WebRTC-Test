@@ -1,4 +1,5 @@
 import Button from "@material-ui/core/Button"
+import Grid from "@material-ui/core/Grid"
 import IconButton from "@material-ui/core/IconButton"
 import TextField from "@material-ui/core/TextField"
 import AssignmentIcon from "@material-ui/icons/Assignment"
@@ -34,7 +35,6 @@ function App() {
       setStream(stream)
       myVideo.current.srcObject = stream
     })
-
     socket.on('me', (id) => { setMe(id) })
     socket.on("callUser", (data) => {
       setReceivingCall(true)
@@ -102,6 +102,15 @@ function App() {
     connectionRef.current.destroy()
   }
 
+  const toggleMic = () => {
+    stream.getAudioTracks()[0].enabled = !stream.getAudioTracks()[0].enabled
+  }
+
+  const toggleVideo = () => {
+    stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled
+  }
+
+
   return (
     <>
       <h1 style={{ textAlign: "center", color: "#fff" }}>Web Video Conference</h1>
@@ -120,6 +129,20 @@ function App() {
       </div>
 
       <div className="myId">
+
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+        >
+          <Button variant="contained" color="secondary" onClick={toggleMic}>
+                Mic
+          </Button>    
+          <Button variant="contained" color="secondary" onClick={toggleVideo}>
+                Video
+          </Button>   
+        </Grid>
 
         {/*enter name */}
         <TextField
