@@ -4,6 +4,9 @@ import IconButton from "@material-ui/core/IconButton"
 import TextField from "@material-ui/core/TextField"
 import AssignmentIcon from "@material-ui/icons/Assignment"
 import PhoneIcon from "@material-ui/icons/Phone"
+import MicIcon from '@material-ui/icons/Mic';
+import VideocamIcon from '@material-ui/icons/Videocam';
+import VolumeMuteIcon from '@material-ui/icons/VolumeMute';
 import React, { useEffect, useRef, useState } from "react"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import Peer from "simple-peer"
@@ -146,24 +149,31 @@ function App() {
           </div>
         </div>
       </div>
-
+      
       <div className="myId">
 
-        <Grid
+      <Grid
           container
           direction="row"
           justify="center"
           alignItems="center"
+          spacing = "10"
         >
-          <Button variant="contained" color="secondary" onClick={toggleMic}>
-            Mic
-          </Button>
-          <Button variant="contained" color="secondary" onClick={toggleVideo}>
-            Video
-          </Button>
-          <Button variant="contained" color="secondary" onClick={toggleSound}>
-            Sound
-          </Button>
+          <Grid item>
+          <IconButton color="primary" aria-label="Mic" onClick={toggleMic}>
+              <MicIcon fontSize="large" />
+          </IconButton>
+          </Grid>
+          <Grid item>
+          <IconButton color="primary" aria-label="Video" onClick={toggleVideo}>
+              <VideocamIcon fontSize="large" />
+          </IconButton>
+          </Grid>
+          <Grid item>
+          <IconButton color="primary" aria-label="Video" onClick={toggleSound}>
+              <VolumeMuteIcon fontSize="large" />
+          </IconButton>
+          </Grid>
         </Grid>
 
         {/* change webcam */}
