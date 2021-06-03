@@ -161,6 +161,9 @@ function App() {
           <Button variant="contained" color="secondary" onClick={toggleVideo}>
             Video
           </Button>
+          <Button variant="contained" color="secondary" onClick={toggleSound}>
+            Sound
+          </Button>
         </Grid>
 
         {/* change webcam */}
