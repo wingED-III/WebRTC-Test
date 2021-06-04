@@ -160,8 +160,10 @@ function App() {
     navigator.mediaDevices.getUserMedia({
       audio: { deviceId: event.target.value ? { exact: event.target.value } : undefined },
       video: true
-    }).then((stream) => {
-      setStream(stream)
+    }).then((new_stream) => {
+      let old_track = stream.getAudioTracks()[0];
+      let new_track = new_stream.getAudioTracks()[0];
+      connectionRef.current.replaceTrack(old_track, new_track, stream)
     })
 
   }
