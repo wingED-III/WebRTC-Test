@@ -132,11 +132,11 @@ function App() {
   }
 
   const toggleMic = () => {
-    stream.getAudioTracks()[0].enabled = !stream.getAudioTracks()[0].enabled
+    myVideo.current.srcObject.getAudioTracks()[0].enabled = !myVideo.current.srcObject.getAudioTracks()[0].enabled
   }
 
   const toggleVideo = () => {
-    stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled
+    myVideo.current.srcObject.getVideoTracks()[0].enabled = !myVideo.current.srcObject.getVideoTracks()[0].enabled
   }
 
   const toggleSound = () => {
@@ -144,7 +144,6 @@ function App() {
   }
 
   const onWebCamChange = (event) => {
-    console.log(event.target.value);
     navigator.mediaDevices.getUserMedia({
       video: { deviceId: event.target.value ? { exact: event.target.value } : undefined },
       audio: true
@@ -184,7 +183,7 @@ function App() {
         direction="row"
         justify="center"
         alignItems="center"
-        spacing="10"
+        spacing= {10}
       >
         <Grid item>
           {stream && <video playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />}
@@ -194,6 +193,18 @@ function App() {
         </Grid>
 
       </Grid>
+
+      {/*Incoming Call , Answer button , Must not calling*/}
+      <div>
+        {receivingCall && !callAccepted ? (
+          <div className="caller">
+            <h1 >{userName} is calling...</h1>
+            <Button variant="contained" color="primary" onClick={answerCall}>
+              Answer
+						</Button>
+          </div>
+        ) : null}
+      </div>
 
       <div className="myId">
 
@@ -288,18 +299,6 @@ function App() {
         </div>
       </div>
 
-
-      {/*Incoming Call , Answer button , Must not calling*/}
-      <div>
-        {receivingCall && !callAccepted ? (
-          <div className="caller">
-            <h1 >{userName} is calling...</h1>
-            <Button variant="contained" color="primary" onClick={answerCall}>
-              Answer
-						</Button>
-          </div>
-        ) : null}
-      </div>
     </>
   );
 }
