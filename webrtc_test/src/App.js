@@ -170,8 +170,9 @@ function App() {
 
   const onSoundOutputChange = (event) => {
     console.log(event.target.value);
-  }
 
+    userVideo.current.setSinkId(event.target.value)
+  }
 
   return (
     <>
@@ -242,7 +243,7 @@ function App() {
         <select onChange={onSoundOutputChange} style={{ marginBottom: "20px" }}>
           {
             sound_output_list.map(device => (
-              <option key={device.deviceId} value={device.id}>- {device.label} </option>))
+              <option key={device.deviceId} value={device.deviceId}>- {device.label} </option>))
           }
 
         </select>
