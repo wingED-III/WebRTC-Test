@@ -148,15 +148,16 @@ function App() {
     navigator.mediaDevices.getUserMedia({
       video: { deviceId: event.target.value ? { exact: event.target.value } : undefined },
       audio: true
-    }).then((stream) => {
-      setStream(stream)
-      myVideo.current.srcObject = stream
+    }).then((new_stream) => {
+      let old_track = stream.getVideoTracks()[0];
+      let new_track = new_stream.getVideoTracks()[0];
+      connectionRef.current.replaceTrack(old_track, new_track, stream)
+      myVideo.current.srcObject = new_stream
     })
   }
 
   const onMicChange = (event) => {
     console.log(event.target.value);
-
     navigator.mediaDevices.getUserMedia({
       audio: { deviceId: event.target.value ? { exact: event.target.value } : undefined },
       video: true
@@ -165,7 +166,6 @@ function App() {
       let new_track = new_stream.getAudioTracks()[0];
       connectionRef.current.replaceTrack(old_track, new_track, stream)
     })
-
   }
 
   const onSoundOutputChange = (event) => {
