@@ -250,7 +250,7 @@ function App() {
 
         {/*enter name */}
         <TextField
-          id="filled-basic"
+          id="filled-name"
           label="Name"
           variant="filled"
           value={name}
@@ -267,7 +267,7 @@ function App() {
 
         {/*enter id */}
         <TextField
-          id="filled-basic"
+          id="filled-id"
           label="ID to call"
           variant="filled"
           value={idToCall}
