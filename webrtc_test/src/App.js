@@ -148,9 +148,15 @@ function App() {
       video: { deviceId: event.target.value ? { exact: event.target.value } : undefined },
       audio: true
     }).then((new_stream) => {
-      let old_track = stream.getVideoTracks()[0];
-      let new_track = new_stream.getVideoTracks()[0];
-      connectionRef.current.replaceTrack(old_track, new_track, stream)
+      if (callAccepted && !callEnded) {
+        let old_track = stream.getVideoTracks()[0];
+        let new_track = new_stream.getVideoTracks()[0];
+        connectionRef.current.replaceTrack(old_track, new_track, stream)
+      }
+      else {
+        setStream(new_stream)
+      }
+
       myVideo.current.srcObject = new_stream
     })
   }
@@ -161,9 +167,14 @@ function App() {
       audio: { deviceId: event.target.value ? { exact: event.target.value } : undefined },
       video: true
     }).then((new_stream) => {
-      let old_track = stream.getAudioTracks()[0];
-      let new_track = new_stream.getAudioTracks()[0];
-      connectionRef.current.replaceTrack(old_track, new_track, stream)
+      if (callAccepted && !callEnded) {
+        let old_track = stream.getAudioTracks()[0];
+        let new_track = new_stream.getAudioTracks()[0];
+        connectionRef.current.replaceTrack(old_track, new_track, stream)
+      }
+      else {
+        setStream(new_stream)
+      }
     })
   }
 
