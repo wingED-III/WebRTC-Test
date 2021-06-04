@@ -1,7 +1,7 @@
 {
   "name": "webrtc-test",
   "version": "1.0.0",
-  "description": "# Hello Wolrd",
+  "description": "This is an peer to peer 2 video conference application.",
   "main": "server.js",
   "dependencies": {
     "express": "^4.17.1",
