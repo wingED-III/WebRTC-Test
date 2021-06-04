@@ -94,10 +94,15 @@ function App() {
       userVideo.current.srcObject = stream
     })
 
-
     socket.on("callAccepted", (signal) => {
       setCallAccepted(true)
       peer.signal(signal)
+    })
+
+    peer.on("close", () => {
+      // console.log('Close!!');
+      alert('The other is disconnected.')
+      leaveCall();
     })
 
     connectionRef.current = peer
@@ -121,8 +126,15 @@ function App() {
       userVideo.current.muted = false
     })
 
+    peer.on("close", () => {
+      // console.log('Close!!');
+      alert('The other is disconnected.')
+      leaveCall();
+    })
+
     peer.signal(callerSignal)
     connectionRef.current = peer
+
   }
 
   const leaveCall = () => {
@@ -162,7 +174,7 @@ function App() {
   }
 
   const onMicChange = (event) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     navigator.mediaDevices.getUserMedia({
       audio: { deviceId: event.target.value ? { exact: event.target.value } : undefined },
       video: true
@@ -179,7 +191,7 @@ function App() {
   }
 
   const onSoundOutputChange = (event) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
 
     userVideo.current.setSinkId(event.target.value)
   }
@@ -194,7 +206,7 @@ function App() {
         direction="row"
         justify="center"
         alignItems="center"
-        spacing= {10}
+        spacing={10}
       >
         <Grid item>
           {stream && <video playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />}
